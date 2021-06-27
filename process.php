@@ -4,6 +4,10 @@ session_start();
 
 $mysqli = new mysqli('localhost', 'root', '', 'crud') or die(mysqli_error($mysqli));
 
+$update = false;
+$name = '';
+$location = '';
+
 if (isset($_POST['save'])){
     $name = $_POST['name'];
     $location = $_POST['location'];
@@ -24,4 +28,15 @@ if (isset($_GET['delete'])){
     $_SESSION['msg_type'] = "danger";
 
     header('location: index.php');
+}
+
+if (isset($_GET['edit'])){
+    $id = $_GET['edit'];
+    $update = true;
+    $result = $mysqli->query("SELECT * FROM data WHERE id=$id") or die($mysqli->error());
+    if ($result){
+        $row = $result->fetch_array();
+        $name = $row['name'];
+        $location = $row['location'];
+    }
 }
